@@ -1,41 +1,35 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import css from './ImageGallery.module.css';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import Modal from 'components/Modal/Modal';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 
+export default function ImageGallery({ images }) {
+  const [showModal, setShowModal] = useState(false);
+  const [bigPic, setBigPic] = useState(null);
 
-export default class ImageGallery extends Component {
-  state = {
-    showModal: false,
-    bigPic: null,
-  };
-
-  componentDidMount() {
+  useEffect(() => {
     document.addEventListener('click', e => {
       if (e.target.nodeName !== 'IMG') {
-        this.setState({ showModal: false });
+        setShowModal(false);
         return;
       } else {
-        let picture = this.props.images.filter(obj => {
+        let picture = images.filter(obj => {
           return obj.id === parseInt(e.target.alt);
         });
-        this.setState({ bigPic: picture[0].largeImageURL });
+        setBigPic(picture[0].largeImageURL);
       }
     });
-  }
+  },[images])
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  function toggleModal () {
+    setShowModal(prevShowModal => !prevShowModal );
   };
-
-  render() {
-    const { showModal, bigPic } = this.state;
     return (
       <>
-        <ul className={css.gallery} onClick={this.toggleModal}>
-          {this.props.images.map(img => {
+        <ul className={css.gallery} onClick={toggleModal}>
+          {images.map(img => {
             return (
               <ImageGalleryItem
                 key={nanoid()}
@@ -46,12 +40,12 @@ export default class ImageGallery extends Component {
           })}
         </ul>
         {showModal && bigPic && (
-          <Modal onClose={this.toggleModal} pic={bigPic} />
+          <Modal onClose={toggleModal} pic={bigPic} />
         )}
       </>
     );
   }
-}
+
 
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(
