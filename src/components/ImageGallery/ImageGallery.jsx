@@ -14,14 +14,16 @@ export default function ImageGallery({ images }) {
       if (e.target.nodeName !== 'IMG') {
         setShowModal(false);
         return;
-      } else {
-        let picture = images.filter(obj => {
-          return obj.id === parseInt(e.target.alt);
-        });
-        setBigPic(picture[0].largeImageURL);
       }
+      let picture = images.filter(obj => {
+        return obj.id === parseInt(e.target.alt);
+      });
+      if (!picture.length) {
+        return;
+      }
+      setBigPic(picture[0].largeImageURL);
     });
-  },[images])
+  }, [images]);
 
   function toggleModal () {
     setShowModal(prevShowModal => !prevShowModal );
