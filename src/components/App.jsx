@@ -33,13 +33,13 @@ export default function App () {
         );
 
         if (response.ok) {
-          const data = await response.json();
+          const pictures = await response.json();
 
-          if (!data.total) {
+          if (!pictures.total) {
             toast.error('Did find anything, mate');
           }
 
-          const selectedProperties = data.hits.map(({ id, largeImageURL, webformatURL }) => ({
+          const selectedProperties = pictures.hits.map(({ id, largeImageURL, webformatURL }) => ({
             id,
             largeImageURL,
             webformatURL,
@@ -47,7 +47,7 @@ export default function App () {
 
           setPictures(prevPictures => [...prevPictures, ...selectedProperties]);
           setStatus('resolved');
-          setTotalHits(data.total);
+          setTotalHits(pictures.total);
         } else {
           throw new Error('Failed to find any images');
         }
