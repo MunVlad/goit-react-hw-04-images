@@ -14,7 +14,6 @@ import Button from './Button/Button';
 export default function App () {
 
   const [pictures, setPictures] = useState([]);
-  const [, setError] = useState('');
   const [status, setStatus] = useState('idle');
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
@@ -52,7 +51,6 @@ export default function App () {
           throw new Error('Failed to find any images');
         }
       } catch (error) {
-        setError(error.message);
         setStatus('rejected');
       }
     };
